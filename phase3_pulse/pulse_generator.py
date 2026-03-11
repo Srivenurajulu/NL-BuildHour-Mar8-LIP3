@@ -59,7 +59,8 @@ Pick 3 impactful, representative quotes from different themes. Include the star 
 
 - Subject line (compelling, includes week reference)
 - Professional HTML email with the pulse note content inline
-- Clean formatting with a brief intro and sign-off
+- Clean formatting with a brief intro
+- Sign off with: "Best regards, Your Friendly Informer !!"
 
 ---
 
