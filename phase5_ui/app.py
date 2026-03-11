@@ -352,20 +352,20 @@ with tab_themes:
                 star = r.get("rating", 0)
                 rating_counts[star] = rating_counts.get(star, 0) + 1
 
-            # Build rating bars HTML
+            # Build rating bars HTML (inline styles for iframe rendering)
             rating_bars = ""
             for star in range(5, 0, -1):
                 c = rating_counts.get(star, 0)
                 bar_pct = round(c / count * 100) if count else 0
                 stars_display = "★" * star + "☆" * (5 - star)
                 rating_bars += f"""
-                <div class="rating-row">
-                    <span class="star-label">{stars_display}</span>
-                    <div class="bar-bg"><div class="bar-fill" style="width:{bar_pct}%;background:{color}"></div></div>
-                    <span class="bar-count">{c}</span>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:13px">
+                    <span style="width:55px;color:#fbbf24">{stars_display}</span>
+                    <div style="flex:1;height:8px;background:#334155;border-radius:4px;overflow:hidden"><div style="height:100%;width:{bar_pct}%;background:{color};border-radius:4px"></div></div>
+                    <span style="width:25px;text-align:right;color:#94a3b8;font-size:12px">{c}</span>
                 </div>"""
 
-            # Sample quotes HTML
+            # Sample quotes HTML (inline styles for iframe rendering)
             quotes = ""
             sample = [r for r in reviews if len(r.get("review_text", "")) > 30][:3]
             for r in sample:
@@ -374,34 +374,39 @@ with tab_themes:
                 if len(r.get("review_text", "")) > 180:
                     text += "…"
                 quotes += f"""
-                <div class="quote-card">
-                    <span class="quote-stars">{stars_str}</span>
-                    <span class="quote-source">{r.get('source', '')}</span>
-                    <p class="quote-text">"{text}"</p>
+                <div style="background:#0f172a;border-radius:8px;padding:10px 12px;margin-bottom:6px;border-left:3px solid #334155">
+                    <span style="color:#fbbf24;font-size:11px">{stars_str}</span>
+                    <span style="color:#64748b;font-size:10px;margin-left:6px">{r.get('source', '')}</span>
+                    <p style="font-size:12px;line-height:1.5;color:#cbd5e1;margin:5px 0 0">"{text}"</p>
                 </div>"""
 
-            # Render theme card
-            st.markdown(f"""
-            <div class="theme-card">
-                <div class="theme-header" style="border-left: 4px solid {color}">
+            # Render theme card using components.html to avoid Streamlit sanitization
+            card_html = f"""
+            <html><body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0">
+            <div style="background:#1e293b;border-radius:12px;border:1px solid #334155;overflow:hidden;margin-bottom:4px">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:18px 20px;gap:12px;border-left:4px solid {color}">
                     <div>
-                        <p class="theme-label">{theme['label']}</p>
-                        <p class="theme-desc">{theme.get('description', '')}</p>
+                        <p style="font-size:17px;font-weight:600;color:#e2e8f0;margin:0 0 4px">{theme['label']}</p>
+                        <p style="color:#94a3b8;font-size:12px;margin:0">{theme.get('description', '')}</p>
                     </div>
-                    <span class="theme-badge" style="background:{color}">{count} · {pct}%</span>
+                    <span style="background:{color};padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;color:white;white-space:nowrap">{count} · {pct}%</span>
                 </div>
-                <div class="theme-body">
+                <div style="padding:0 20px 18px;display:grid;grid-template-columns:220px 1fr;gap:20px">
                     <div>
-                        <p class="section-title">Ratings</p>
+                        <p style="font-size:12px;color:#94a3b8;margin:0 0 10px;text-transform:uppercase;letter-spacing:0.5px">Ratings</p>
                         {rating_bars}
                     </div>
                     <div>
-                        <p class="section-title">Sample Reviews</p>
+                        <p style="font-size:12px;color:#94a3b8;margin:0 0 10px;text-transform:uppercase;letter-spacing:0.5px">Sample Reviews</p>
                         {quotes}
                     </div>
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            </body></html>
+            """
+            # Calculate card height based on content
+            card_height = 250 + max(0, (len(sample) - 2) * 60)
+            st.components.v1.html(card_html, height=card_height, scrolling=False)
     else:
         st.markdown("""
         <div class="empty-state">
