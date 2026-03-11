@@ -165,4 +165,3 @@ The pipeline generates a weekly pulse note like this:
 
 ## 📝 License
 
-This project was built as part of the Next Leap PM Fellowship.
