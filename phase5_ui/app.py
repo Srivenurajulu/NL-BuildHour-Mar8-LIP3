@@ -438,7 +438,7 @@ with tab_pulse:
             elif s.startswith('> '):
                 if in_list: html_parts.append('</ul>'); in_list = False
                 text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s[2:])
-                html_parts.append(f'<blockquote style="border-left:3px solid #6366f1;padding:8px 16px;margin:8px 0;background:#0f172a;border-radius:0 8px 8px 0;font-style:italic;color:#cbd5e1">{text}</blockquote>')
+                html_parts.append(f'<blockquote style="border-left:3px solid #fbbf24;padding:8px 16px;margin:8px 0;background:#0f172a;border-radius:0 8px 8px 0;font-style:italic;color:#fbbf24">{text}</blockquote>')
             elif _re.match(r'^[-*] ', s):
                 if not in_list: html_parts.append('<ul style="list-style:disc;padding-left:20px">'); in_list = True
                 content = _re.sub(r'^[-*]\s+', '', s)
