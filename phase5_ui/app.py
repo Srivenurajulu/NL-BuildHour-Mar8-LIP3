@@ -420,9 +420,48 @@ with tab_themes:
 
 with tab_pulse:
     if pulse_md:
-        st.markdown('<div class="pulse-container">', unsafe_allow_html=True)
-        st.markdown(pulse_md)
-        st.markdown('</div>', unsafe_allow_html=True)
+        import re as _re
+        # Convert markdown to HTML with proper line-by-line rendering
+        lines = pulse_md.split('\n')
+        html_parts = []
+        in_list = False
+        for line in lines:
+            s = line.strip()
+            if s.startswith('## '):
+                if in_list: html_parts.append('</ul>'); in_list = False
+                text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s[3:])
+                html_parts.append(f'<h2>{text}</h2>')
+            elif s.startswith('### '):
+                if in_list: html_parts.append('</ul>'); in_list = False
+                text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s[4:])
+                html_parts.append(f'<h3>{text}</h3>')
+            elif s.startswith('> '):
+                if in_list: html_parts.append('</ul>'); in_list = False
+                text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s[2:])
+                html_parts.append(f'<blockquote style="border-left:3px solid #6366f1;padding:8px 16px;margin:8px 0;background:#0f172a;border-radius:0 8px 8px 0;font-style:italic;color:#cbd5e1">{text}</blockquote>')
+            elif _re.match(r'^[-*] ', s):
+                if not in_list: html_parts.append('<ul style="list-style:disc;padding-left:20px">'); in_list = True
+                content = _re.sub(r'^[-*]\s+', '', s)
+                content = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
+                html_parts.append(f'<li style="margin-bottom:6px">{content}</li>')
+            elif _re.match(r'^\d+\.\s', s):
+                if not in_list: html_parts.append('<ol style="padding-left:20px">'); in_list = True
+                content = _re.sub(r'^\d+\.\s+', '', s)
+                content = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
+                html_parts.append(f'<li style="margin-bottom:6px">{content}</li>')
+            elif s.startswith('**') and s.endswith('**'):
+                if in_list: html_parts.append('</ul>'); in_list = False
+                text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s)
+                html_parts.append(f'<p>{text}</p>')
+            elif s == '':
+                if in_list: html_parts.append('</ul>' if not any('ol' in p for p in html_parts[-5:]) else '</ol>'); in_list = False
+            else:
+                if in_list: html_parts.append('</ul>'); in_list = False
+                text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s)
+                html_parts.append(f'<p>{text}</p>')
+        if in_list: html_parts.append('</ul>')
+        pulse_html_content = '\n'.join(html_parts)
+        st.markdown(f'<div class="pulse-container">{pulse_html_content}</div>', unsafe_allow_html=True)
 
         # Download button
         st.download_button(
