@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Environment
+.env
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Output (generated data — regenerate with the pipeline)
+output/*.json
+output/*.md
+output/*.html
+output/*.eml
+output/*.csv
+
+# Gemini agent files
+.gemini/

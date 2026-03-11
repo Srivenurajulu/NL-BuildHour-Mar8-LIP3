@@ -1,0 +1,15 @@
+# Core
+python-dotenv>=1.0.0
+pandas>=1.5.0
+
+# Phase 1 — Scraping
+google-play-scraper>=1.2.4
+
+# Phase 2 — Theme Classification (Groq)
+groq>=0.4.0
+
+# Phase 3 — Pulse Note Generation (Gemini)
+google-genai>=1.0.0
+
+# Phase 5 — Web UI
+streamlit>=1.30.0
