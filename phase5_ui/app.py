@@ -517,7 +517,21 @@ with tab_email:
             </div>
         </div>
         """, unsafe_allow_html=True)
-        st.components.v1.html(email_html_raw, height=600, scrolling=True)
+
+        # Force realistic email styling (white centered paper)
+        import re as _re
+        inner_html = _re.sub(r'</?(html|head|body|title|meta)[^>]*>', '', email_html_raw, flags=_re.IGNORECASE)
+        display_html = f"""
+        <html>
+        <body style="margin:0; padding:20px; background-color:transparent; display:flex; justify-content:center;">
+            <div style="background-color:#ffffff; padding:40px; border-radius:8px; width:100%; max-width:650px; box-shadow:0 10px 15px -3px rgba(0,0,0,0.1); color:#333333; font-family:Arial,sans-serif; line-height:1.6;">
+                {inner_html}
+            </div>
+        </body>
+        </html>
+        """
+
+        st.components.v1.html(display_html, height=750, scrolling=True)
     else:
         st.markdown("""
         <div class="empty-state">
