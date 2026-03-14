@@ -37,8 +37,11 @@ st.markdown("""
     
     /* Stat cards */
     .stat-card {
-        background: var(--secondary-background-color); border-radius: 12px; padding: 20px;
+        background: rgba(128, 128, 128, 0.08); 
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        border-radius: 12px; padding: 20px;
         border: 1px solid rgba(128, 128, 128, 0.2); text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
     .stat-val {
         font-size: 32px; font-weight: 700;
@@ -49,8 +52,11 @@ st.markdown("""
 
     /* Theme cards */
     .theme-card {
-        background: var(--secondary-background-color); border-radius: 12px;
+        background: rgba(128, 128, 128, 0.08); 
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        border-radius: 12px;
         border: 1px solid rgba(128, 128, 128, 0.2); overflow: hidden; margin-bottom: 14px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
     .theme-header {
         display: flex; justify-content: space-between; align-items: flex-start;
@@ -80,7 +86,7 @@ st.markdown("""
 
     /* Quote cards */
     .quote-card {
-        background: var(--background-color); border-radius: 8px; padding: 10px 12px;
+        background: rgba(128, 128, 128, 0.04); border-radius: 8px; padding: 10px 12px;
         margin-bottom: 6px; border-left: 3px solid rgba(128, 128, 128, 0.3);
     }
     .quote-stars { color: #fbbf24; font-size: 11px; }
@@ -89,8 +95,11 @@ st.markdown("""
 
     /* Pulse note */
     .pulse-container {
-        background: var(--secondary-background-color); border-radius: 12px; padding: 28px;
+        background: rgba(128, 128, 128, 0.08); 
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        border-radius: 12px; padding: 28px;
         border: 1px solid rgba(128, 128, 128, 0.2); line-height: 1.8; color: var(--text-color);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
     .pulse-container h2 { font-size: 20px; margin: 14px 0 8px; color: var(--text-color); }
     .pulse-container h3 { font-size: 16px; margin: 18px 0 8px; color: #6366f1; }
@@ -104,8 +113,11 @@ st.markdown("""
 
     /* Email preview */
     .email-frame {
-        background: var(--secondary-background-color); border-radius: 12px; overflow: hidden;
+        background: rgba(128, 128, 128, 0.08); 
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        border-radius: 12px; overflow: hidden;
         border: 1px solid rgba(128, 128, 128, 0.2); margin-bottom: 16px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
     .email-bar {
         padding: 16px 20px; border-bottom: 1px solid rgba(128, 128, 128, 0.2);
