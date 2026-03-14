@@ -246,7 +246,7 @@ if "pipeline_status" not in st.session_state:
 
 col_title, col_action = st.columns([3, 1])
 with col_title:
-    st.markdown('<div class="main-title">INDmoney — Review Insights</div>', unsafe_allow_html=True)
+    st.markdown('<h1 style="margin:0; padding:0; font-size:42px; font-weight:800; background:linear-gradient(90deg, #fbbf24, #ef4444); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">INDmoney — Review Insights</h1>', unsafe_allow_html=True)
     st.caption(f"{date.today().strftime('%d %b %Y')}")
 
 with col_action:
