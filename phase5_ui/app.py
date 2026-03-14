@@ -367,8 +367,25 @@ with tab_themes:
 
             # Sample quotes HTML (inline styles for iframe rendering)
             quotes = ""
-            sample = [r for r in reviews if len(r.get("review_text", "")) > 30][:3]
-            for r in sample:
+            
+            # Filter for meaningful reviews
+            valid_reviews = [r for r in reviews if len(r.get("review_text", "")) > 30]
+            
+            # Try to get a mix of sources
+            app_store_reviews = [r for r in valid_reviews if r.get("source") == "App Store"]
+            play_store_reviews = [r for r in valid_reviews if r.get("source") != "App Store"]
+            
+            sample = []
+            if app_store_reviews and play_store_reviews:
+                # 1 from App Store, 2 from Play Store (or vice versa depending on what's available)
+                sample.append(app_store_reviews[0])
+                sample.extend(play_store_reviews[:2])
+                if len(sample) < 3 and len(app_store_reviews) > 1:
+                    sample.append(app_store_reviews[1])
+            else:
+                sample = valid_reviews[:3]
+                
+            for r in sample[:3]:
                 stars_str = "★" * r.get("rating", 0) + "☆" * (5 - r.get("rating", 0))
                 text = r.get("review_text", "")[:180]
                 if len(r.get("review_text", "")) > 180:
