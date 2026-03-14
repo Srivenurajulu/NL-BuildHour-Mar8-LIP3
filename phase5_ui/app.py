@@ -41,7 +41,7 @@ st.markdown("""
     /* Gradient title */
     .main-title {
         font-size: 24px; font-weight: 700;
-        background: linear-gradient(135deg, #6366f1, #a855f7);
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         margin-bottom: 4px;
     }
