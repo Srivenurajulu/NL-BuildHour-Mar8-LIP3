@@ -30,45 +30,34 @@ st.set_page_config(
 )
 
 
-# ─── Custom CSS (dark theme matching localhost dashboard) ────────────────────
+# ─── Custom CSS (Responsive Theme) ───────────────────────────────────────────
 st.markdown("""
 <style>
-    /* Dark background */
-    .stApp { background-color: #0f172a; }
-    [data-testid="stHeader"] { background: linear-gradient(135deg, #1e293b, #0f172a); }
-    [data-testid="stSidebar"] { background: #1e293b; }
-
-    /* Gradient title */
-    .main-title {
-        font-size: 24px; font-weight: 700;
-        background: linear-gradient(135deg, #f59e0b, #ef4444);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        margin-bottom: 4px;
-    }
-
+    /* Use Streamlit native CSS variables for Light/Dark mode support */
+    
     /* Stat cards */
     .stat-card {
-        background: #1e293b; border-radius: 12px; padding: 20px;
-        border: 1px solid #334155; text-align: center;
+        background: var(--secondary-background-color); border-radius: 12px; padding: 20px;
+        border: 1px solid rgba(128, 128, 128, 0.2); text-align: center;
     }
     .stat-val {
         font-size: 32px; font-weight: 700;
         background: linear-gradient(135deg, #6366f1, #a855f7);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .stat-lbl { color: #94a3b8; font-size: 13px; margin-top: 2px; }
+    .stat-lbl { color: var(--faded-text-color); font-size: 13px; margin-top: 2px; }
 
     /* Theme cards */
     .theme-card {
-        background: #1e293b; border-radius: 12px;
-        border: 1px solid #334155; overflow: hidden; margin-bottom: 14px;
+        background: var(--secondary-background-color); border-radius: 12px;
+        border: 1px solid rgba(128, 128, 128, 0.2); overflow: hidden; margin-bottom: 14px;
     }
     .theme-header {
         display: flex; justify-content: space-between; align-items: flex-start;
         padding: 18px 20px; gap: 12px;
     }
-    .theme-label { font-size: 17px; font-weight: 600; color: #e2e8f0; margin: 0 0 4px; }
-    .theme-desc { color: #94a3b8; font-size: 12px; margin: 0; }
+    .theme-label { font-size: 17px; font-weight: 600; color: var(--text-color); margin: 0 0 4px; }
+    .theme-desc { color: var(--faded-text-color); font-size: 12px; margin: 0; }
     .theme-badge {
         padding: 5px 14px; border-radius: 20px; font-size: 12px;
         font-weight: 600; color: white; white-space: nowrap;
@@ -78,66 +67,66 @@ st.markdown("""
         grid-template-columns: 220px 1fr; gap: 20px;
     }
     .section-title {
-        font-size: 12px; color: #94a3b8; margin: 0 0 10px;
+        font-size: 12px; color: var(--faded-text-color); margin: 0 0 10px;
         text-transform: uppercase; letter-spacing: 0.5px;
     }
 
     /* Rating bars */
     .rating-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; font-size: 13px; }
     .star-label { width: 55px; color: #fbbf24; }
-    .bar-bg { flex: 1; height: 8px; background: #334155; border-radius: 4px; overflow: hidden; }
+    .bar-bg { flex: 1; height: 8px; background: rgba(128, 128, 128, 0.2); border-radius: 4px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 4px; }
-    .bar-count { width: 25px; text-align: right; color: #94a3b8; font-size: 12px; }
+    .bar-count { width: 25px; text-align: right; color: var(--faded-text-color); font-size: 12px; }
 
     /* Quote cards */
     .quote-card {
-        background: #0f172a; border-radius: 8px; padding: 10px 12px;
-        margin-bottom: 6px; border-left: 3px solid #334155;
+        background: var(--background-color); border-radius: 8px; padding: 10px 12px;
+        margin-bottom: 6px; border-left: 3px solid rgba(128, 128, 128, 0.3);
     }
     .quote-stars { color: #fbbf24; font-size: 11px; }
-    .quote-source { color: #64748b; font-size: 10px; margin-left: 6px; }
-    .quote-text { font-size: 12px; line-height: 1.5; color: #cbd5e1; margin: 5px 0 0; }
+    .quote-source { color: var(--faded-text-color); font-size: 10px; margin-left: 6px; }
+    .quote-text { font-size: 12px; line-height: 1.5; color: var(--text-color); margin: 5px 0 0; }
 
     /* Pulse note */
     .pulse-container {
-        background: #1e293b; border-radius: 12px; padding: 28px;
-        border: 1px solid #334155; line-height: 1.8; color: #e2e8f0;
+        background: var(--secondary-background-color); border-radius: 12px; padding: 28px;
+        border: 1px solid rgba(128, 128, 128, 0.2); line-height: 1.8; color: var(--text-color);
     }
-    .pulse-container h2 { font-size: 20px; margin: 14px 0 8px; color: #e2e8f0; }
-    .pulse-container h3 { font-size: 16px; margin: 18px 0 8px; color: #a5b4fc; }
-    .pulse-container strong { color: #f1f5f9; }
+    .pulse-container h2 { font-size: 20px; margin: 14px 0 8px; color: var(--text-color); }
+    .pulse-container h3 { font-size: 16px; margin: 18px 0 8px; color: #6366f1; }
+    .pulse-container strong { font-weight: 700; }
     .pulse-container li { margin-left: 20px; margin-bottom: 5px; }
     .pulse-container blockquote {
         border-left: 3px solid #6366f1; padding: 8px 16px; margin: 8px 0;
-        background: #0f172a; border-radius: 0 8px 8px 0;
-        font-style: italic; color: #cbd5e1;
+        background: var(--background-color); border-radius: 0 8px 8px 0;
+        font-style: italic; color: var(--faded-text-color);
     }
 
     /* Email preview */
     .email-frame {
-        background: #1e293b; border-radius: 12px; overflow: hidden;
-        border: 1px solid #334155; margin-bottom: 16px;
+        background: var(--secondary-background-color); border-radius: 12px; overflow: hidden;
+        border: 1px solid rgba(128, 128, 128, 0.2); margin-bottom: 16px;
     }
     .email-bar {
-        padding: 16px 20px; border-bottom: 1px solid #334155;
+        padding: 16px 20px; border-bottom: 1px solid rgba(128, 128, 128, 0.2);
     }
-    .email-subject { font-weight: 600; font-size: 14px; color: #e2e8f0; }
+    .email-subject { font-weight: 600; font-size: 14px; color: var(--text-color); }
 
     /* Log area */
     .log-area {
-        background: #0f172a; border: 1px solid #334155; border-radius: 8px;
+        background: var(--background-color); border: 1px solid rgba(128, 128, 128, 0.2); border-radius: 8px;
         padding: 16px; font-size: 12px; max-height: 300px; overflow-y: auto;
-        color: #cbd5e1; white-space: pre-wrap; font-family: monospace;
+        color: var(--text-color); white-space: pre-wrap; font-family: monospace;
     }
 
     /* Empty state */
-    .empty-state { text-align: center; padding: 60px; color: #64748b; }
+    .empty-state { text-align: center; padding: 60px; color: var(--faded-text-color); }
     .empty-icon { font-size: 48px; margin-bottom: 12px; }
 
     /* Tabs override */
-    .stTabs [data-baseweb="tab-list"] { gap: 6px; border-bottom: 1px solid #334155; }
+    .stTabs [data-baseweb="tab-list"] { gap: 6px; border-bottom: 1px solid rgba(128, 128, 128, 0.2); }
     .stTabs [data-baseweb="tab"] {
-        background: transparent; color: #94a3b8; font-weight: 500;
+        background: transparent; color: var(--faded-text-color); font-weight: 500;
         border-bottom: 2px solid transparent; padding: 10px 20px;
     }
     .stTabs [aria-selected="true"] { color: #6366f1 !important; border-bottom-color: #6366f1 !important; }
@@ -406,33 +395,29 @@ with tab_themes:
                     <p style="font-size:12px;line-height:1.5;color:#cbd5e1;margin:5px 0 0">"{text}"</p>
                 </div>"""
 
-            # Render theme card using components.html to avoid Streamlit sanitization
+            # Render theme card using st.markdown to inherit Streamlit CSS variables
             card_html = f"""
-            <html><body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0">
-            <div style="background:#1e293b;border-radius:12px;border:1px solid #334155;overflow:hidden;margin-bottom:4px">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:18px 20px;gap:12px;border-left:4px solid {color}">
+            <div class="theme-card">
+                <div class="theme-header" style="border-left:4px solid {color}">
                     <div>
-                        <p style="font-size:17px;font-weight:600;color:#e2e8f0;margin:0 0 4px">{theme['label']}</p>
-                        <p style="color:#94a3b8;font-size:12px;margin:0">{theme.get('description', '')}</p>
+                        <p class="theme-label">{theme['label']}</p>
+                        <p class="theme-desc">{theme.get('description', '')}</p>
                     </div>
-                    <span style="background:{color};padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;color:white;white-space:nowrap">{count} · {pct}%</span>
+                    <span class="theme-badge" style="background:{color}">{count} · {pct}%</span>
                 </div>
-                <div style="padding:0 20px 18px;display:grid;grid-template-columns:220px 1fr;gap:20px">
+                <div class="theme-body">
                     <div>
-                        <p style="font-size:12px;color:#94a3b8;margin:0 0 10px;text-transform:uppercase;letter-spacing:0.5px">Ratings</p>
+                        <p class="section-title">Ratings</p>
                         {rating_bars}
                     </div>
                     <div>
-                        <p style="font-size:12px;color:#94a3b8;margin:0 0 10px;text-transform:uppercase;letter-spacing:0.5px">Sample Reviews</p>
+                        <p class="section-title">Sample Reviews</p>
                         {quotes}
                     </div>
                 </div>
             </div>
-            </body></html>
             """
-            # Calculate card height based on content
-            card_height = 250 + max(0, (len(sample) - 2) * 60)
-            st.components.v1.html(card_html, height=card_height, scrolling=False)
+            st.markdown(card_html, unsafe_allow_html=True)
     else:
         st.markdown("""
         <div class="empty-state">
@@ -464,7 +449,7 @@ with tab_pulse:
             elif s.startswith('> '):
                 if in_list: html_parts.append('</ul>'); in_list = False
                 text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s[2:])
-                html_parts.append(f'<blockquote style="border-left:3px solid #fbbf24;padding:8px 16px;margin:8px 0;background:#0f172a;border-radius:0 8px 8px 0;font-style:italic;color:#fbbf24">{text}</blockquote>')
+                html_parts.append(f'<blockquote style="border-left:3px solid #fbbf24;padding:8px 16px;margin:8px 0;background:var(--background-color);border-radius:0 8px 8px 0;font-style:italic;color:var(--faded-text-color)">{text}</blockquote>')
             elif _re.match(r'^[-*] ', s):
                 if not in_list: html_parts.append('<ul style="list-style:disc;padding-left:20px">'); in_list = True
                 content = _re.sub(r'^[-*]\s+', '', s)
