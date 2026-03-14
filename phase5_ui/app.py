@@ -373,10 +373,14 @@ with tab_themes:
                 text = r.get("review_text", "")[:180]
                 if len(r.get("review_text", "")) > 180:
                     text += "…"
+                
+                source = r.get('source', 'Play Store')
+                source_icon = "🍏" if source == "App Store" else "▶️"
+                
                 quotes += f"""
                 <div style="background:#0f172a;border-radius:8px;padding:10px 12px;margin-bottom:6px;border-left:3px solid #334155">
                     <span style="color:#fbbf24;font-size:11px">{stars_str}</span>
-                    <span style="color:#64748b;font-size:10px;margin-left:6px">{r.get('source', '')}</span>
+                    <span style="color:#64748b;font-size:10px;margin-left:6px">{source_icon} {source}</span>
                     <p style="font-size:12px;line-height:1.5;color:#cbd5e1;margin:5px 0 0">"{text}"</p>
                 </div>"""
 
