@@ -353,11 +353,11 @@ with tab_themes:
                 bar_pct = round(c / count * 100) if count else 0
                 stars_display = "★" * star + "☆" * (5 - star)
                 rating_bars += f"""
-                <div class="rating-row">
-                    <span class="star-label">{stars_display}</span>
-                    <div class="bar-bg"><div class="bar-fill" style="width:{bar_pct}%;background:{color}"></div></div>
-                    <span class="bar-count">{c}</span>
-                </div>"""
+<div class="rating-row">
+    <span class="star-label">{stars_display}</span>
+    <div class="bar-bg"><div class="bar-fill" style="width:{bar_pct}%;background:{color}"></div></div>
+    <span class="bar-count">{c}</span>
+</div>"""
 
             # Sample quotes HTML (inline styles for iframe rendering)
             quotes = ""
@@ -389,42 +389,42 @@ with tab_themes:
                 source_icon = "🍏" if source == "App Store" else "▶️"
                 
                 quotes += f"""
-                <div class="quote-card">
-                    <span class="quote-stars">{stars_str}</span>
-                    <span class="quote-source">{source_icon} {source}</span>
-                    <p class="quote-text">"{text}"</p>
-                </div>"""
+<div class="quote-card">
+    <span class="quote-stars">{stars_str}</span>
+    <span class="quote-source">{source_icon} {source}</span>
+    <p class="quote-text">"{text}"</p>
+</div>"""
 
             # Render theme card using st.markdown to inherit Streamlit CSS variables
             card_html = f"""
-            <div class="theme-card">
-                <div class="theme-header" style="border-left:4px solid {color}">
-                    <div>
-                        <p class="theme-label">{theme['label']}</p>
-                        <p class="theme-desc">{theme.get('description', '')}</p>
-                    </div>
-                    <span class="theme-badge" style="background:{color}">{count} · {pct}%</span>
-                </div>
-                <div class="theme-body">
-                    <div>
-                        <p class="section-title">Ratings</p>
-                        {rating_bars}
-                    </div>
-                    <div>
-                        <p class="section-title">Sample Reviews</p>
-                        {quotes}
-                    </div>
-                </div>
-            </div>
-            """
+<div class="theme-card">
+    <div class="theme-header" style="border-left:4px solid {color}">
+        <div>
+            <p class="theme-label">{theme['label']}</p>
+            <p class="theme-desc">{theme.get('description', '')}</p>
+        </div>
+        <span class="theme-badge" style="background:{color}">{count} · {pct}%</span>
+    </div>
+    <div class="theme-body">
+        <div>
+            <p class="section-title">Ratings</p>
+            {rating_bars}
+        </div>
+        <div>
+            <p class="section-title">Sample Reviews</p>
+            {quotes}
+        </div>
+    </div>
+</div>
+"""
             st.markdown(card_html, unsafe_allow_html=True)
     else:
         st.markdown("""
-        <div class="empty-state">
-            <div class="empty-icon">🔍</div>
-            <p>No data yet. Click <strong>Analyze Reviews</strong> to start the pipeline.</p>
-        </div>
-        """, unsafe_allow_html=True)
+<div class="empty-state">
+    <div class="empty-icon">🔍</div>
+    <p>No data yet. Click <strong>Analyze Reviews</strong> to start the pipeline.</p>
+</div>
+""", unsafe_allow_html=True)
 
 
 # ── Tab 2: Pulse Note ────────────────────────────────────────────────────────
@@ -483,11 +483,11 @@ with tab_pulse:
         )
     else:
         st.markdown("""
-        <div class="empty-state">
-            <div class="empty-icon">📝</div>
-            <p>Run the analysis first to generate the pulse note.</p>
-        </div>
-        """, unsafe_allow_html=True)
+<div class="empty-state">
+    <div class="empty-icon">📝</div>
+    <p>Run the analysis first to generate the pulse note.</p>
+</div>
+""", unsafe_allow_html=True)
 
 
 # ── Tab 3: Email ─────────────────────────────────────────────────────────────
@@ -522,12 +522,12 @@ with tab_email:
     # Email preview
     if email_html_raw:
         st.markdown(f"""
-        <div class="email-frame">
-            <div class="email-bar">
-                <div class="email-subject">📧 {email_subject}</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+<div class="email-frame">
+    <div class="email-bar">
+        <div class="email-subject">📧 {email_subject}</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
         # Force realistic email styling (white centered paper)
         import re as _re
@@ -545,8 +545,8 @@ with tab_email:
         st.components.v1.html(display_html, height=750, scrolling=True)
     else:
         st.markdown("""
-        <div class="empty-state">
-            <div class="empty-icon">📧</div>
-            <p>Run the analysis first to generate the email.</p>
-        </div>
-        """, unsafe_allow_html=True)
+<div class="empty-state">
+    <div class="empty-icon">📧</div>
+    <p>Run the analysis first to generate the email.</p>
+</div>
+""", unsafe_allow_html=True)
