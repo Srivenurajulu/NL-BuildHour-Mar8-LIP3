@@ -439,9 +439,14 @@ with tab_pulse:
         for line in lines:
             s = line.strip()
             if s.startswith('## '):
-                if in_list: html_parts.append('</ul>'); in_list = False
                 text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s[3:])
-                html_parts.append(f'<h2>{text}</h2>')
+                if "Weekly Review Pulse" in text:
+                    # Special case for the main title: don't render it in the markdown block
+                    # Instead we will render it using Streamlit columns ABOVE the markdown block
+                    in_list = False
+                else:
+                    if in_list: html_parts.append('</ul>'); in_list = False
+                    html_parts.append(f'<h2>{text}</h2>')
             elif s.startswith('### '):
                 if in_list: html_parts.append('</ul>'); in_list = False
                 text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s[4:])
@@ -472,15 +477,22 @@ with tab_pulse:
                 html_parts.append(f'<p>{text}</p>')
         if in_list: html_parts.append('</ul>')
         pulse_html_content = '\n'.join(html_parts)
-        st.markdown(f'<div class="pulse-container">{pulse_html_content}</div>', unsafe_allow_html=True)
-
-        # Download button
-        st.download_button(
-            label="📥 Download Pulse Note (.md)",
-            data=pulse_md,
-            file_name=f"weekly_pulse-{date.today().strftime('%Y-%m-%d')}.md",
-            mime="text/markdown",
-        )
+        
+        # Render the Header and Download Button side-by-side
+        head_col, btn_col = st.columns([4, 1.2], vertical_alignment="bottom")
+        with head_col:
+            st.markdown("<h2 style='margin-bottom:0px; padding-bottom:0px;'>📊 INDmoney — Weekly Review Pulse</h2>", unsafe_allow_html=True)
+        with btn_col:
+            st.download_button(
+                label="📁 Download (.md)",
+                data=pulse_md,
+                file_name=f"weekly_pulse-{date.today().strftime('%Y-%m-%d')}.md",
+                mime="text/markdown",
+                use_container_width=True
+            )
+            
+        # Render the rest of the generated pulse note HTML
+        st.markdown(f'<div class="pulse-container" style="margin-top:10px;">{pulse_html_content}</div>', unsafe_allow_html=True)
     else:
         st.markdown("""
 <div class="empty-state">
