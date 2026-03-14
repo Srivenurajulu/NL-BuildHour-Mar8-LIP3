@@ -353,10 +353,10 @@ with tab_themes:
                 bar_pct = round(c / count * 100) if count else 0
                 stars_display = "★" * star + "☆" * (5 - star)
                 rating_bars += f"""
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:13px">
-                    <span style="width:55px;color:#fbbf24">{stars_display}</span>
-                    <div style="flex:1;height:8px;background:#334155;border-radius:4px;overflow:hidden"><div style="height:100%;width:{bar_pct}%;background:{color};border-radius:4px"></div></div>
-                    <span style="width:25px;text-align:right;color:#94a3b8;font-size:12px">{c}</span>
+                <div class="rating-row">
+                    <span class="star-label">{stars_display}</span>
+                    <div class="bar-bg"><div class="bar-fill" style="width:{bar_pct}%;background:{color}"></div></div>
+                    <span class="bar-count">{c}</span>
                 </div>"""
 
             # Sample quotes HTML (inline styles for iframe rendering)
@@ -389,10 +389,10 @@ with tab_themes:
                 source_icon = "🍏" if source == "App Store" else "▶️"
                 
                 quotes += f"""
-                <div style="background:#0f172a;border-radius:8px;padding:10px 12px;margin-bottom:6px;border-left:3px solid #334155">
-                    <span style="color:#fbbf24;font-size:11px">{stars_str}</span>
-                    <span style="color:#64748b;font-size:10px;margin-left:6px">{source_icon} {source}</span>
-                    <p style="font-size:12px;line-height:1.5;color:#cbd5e1;margin:5px 0 0">"{text}"</p>
+                <div class="quote-card">
+                    <span class="quote-stars">{stars_str}</span>
+                    <span class="quote-source">{source_icon} {source}</span>
+                    <p class="quote-text">"{text}"</p>
                 </div>"""
 
             # Render theme card using st.markdown to inherit Streamlit CSS variables
