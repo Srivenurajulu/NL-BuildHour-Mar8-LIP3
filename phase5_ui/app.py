@@ -158,6 +158,11 @@ st.markdown("""
     @media (max-width: 768px) {
         .theme-body { grid-template-columns: 1fr !important; }
     }
+
+    /* Make tabs bold */
+    button[data-baseweb="tab"] {
+        font-weight: 700 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
