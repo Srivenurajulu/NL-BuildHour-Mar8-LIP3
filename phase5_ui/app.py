@@ -57,6 +57,11 @@ st.markdown("""
         border-radius: 12px;
         border: 1px solid rgba(128, 128, 128, 0.2); overflow: hidden; margin-bottom: 14px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .theme-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 20px rgba(0,0,0,0.15);
     }
     .theme-header {
         display: flex; justify-content: space-between; align-items: flex-start;
@@ -92,6 +97,12 @@ st.markdown("""
     .quote-stars { color: #fbbf24; font-size: 11px; }
     .quote-source { color: var(--faded-text-color); font-size: 10px; margin-left: 6px; }
     .quote-text { font-size: 12px; line-height: 1.5; color: var(--text-color); margin: 5px 0 0; }
+    .badge-sentiment {
+        padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 9px; margin-left: 8px; text-transform: uppercase;
+    }
+    .sentiment-positive { color: #10b981; background: rgba(16, 185, 129, 0.15); }
+    .sentiment-mixed { color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
+    .sentiment-critical { color: #ef4444; background: rgba(239, 68, 68, 0.15); }
 
     /* Pulse note */
     .pulse-container {
@@ -392,7 +403,8 @@ with tab_themes:
                 sample = valid_reviews[:3]
                 
             for r in sample[:3]:
-                stars_str = "★" * r.get("rating", 0) + "☆" * (5 - r.get("rating", 0))
+                rating = r.get("rating", 0)
+                stars_str = "★" * rating + "☆" * (5 - rating)
                 text = r.get("review_text", "")[:180]
                 if len(r.get("review_text", "")) > 180:
                     text += "…"
@@ -400,9 +412,17 @@ with tab_themes:
                 source = r.get('source', 'Play Store')
                 source_icon = "🍏" if source == "App Store" else "▶️"
                 
+                if rating >= 4:
+                    sentiment_class, sentiment_label = "sentiment-positive", "Positive"
+                elif rating == 3:
+                    sentiment_class, sentiment_label = "sentiment-mixed", "Mixed"
+                else:
+                    sentiment_class, sentiment_label = "sentiment-critical", "Critical"
+
                 quotes += f"""
 <div class="quote-card">
     <span class="quote-stars">{stars_str}</span>
+    <span class="badge-sentiment {sentiment_class}">{sentiment_label}</span>
     <span class="quote-source">{source_icon} {source}</span>
     <p class="quote-text">"{text}"</p>
 </div>"""
