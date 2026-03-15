@@ -1,6 +1,8 @@
-# INDmoney — Weekly App Review Insights
+# INDmoney Review Insights & Pulse Generator
 
-Automated pipeline that scrapes app reviews, discovers themes via AI, generates a weekly pulse note, and emails it to your team — all from a **Streamlit Web UI**.
+An end-to-end, AI-powered pipeline designed for Product Managers to automatically extract, analyze, and distribute insights from public app store reviews. 
+
+This tool scrapes recent reviews from both the Google Play Store and Apple App Store, uses a Local/Cloud hybrid LLM architecture to cluster those reviews into actionable product themes, generates a comprehensive "Weekly Pulse Note", and distributes it via email. All of this is controlled through a beautiful, responsive Streamlit Web UI.
 
 ![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python)
 ![Streamlit](https://img.shields.io/badge/UI-Streamlit-red?logo=streamlit)
@@ -9,31 +11,33 @@ Automated pipeline that scrapes app reviews, discovers themes via AI, generates 
 
 ---
 
-## ✨ Features
+## ✨ Key Features & Implementation Details
 
-- **📱 Scrapes** 200+ reviews from Play Store & App Store
-- **🧠 AI-powered** theme discovery & classification (Groq Llama 3.3 70B)
-- **📊 Generates** a weekly pulse note with top themes, quotes & recommendations (Gemini 2.5 Flash)
-- **📧 Emails** the pulse note to your team via Gmail SMTP
-- **🖥️ Streamlit Web UI** — click a button to run the full pipeline
-- **🔒 PII-free** — all personal data is scrubbed before processing
+### 1. Robust Data Pipeline (Phases 1-4)
+- **Data Extraction (Phase 1):** Scrapes up to 200 of the newest, most relevant reviews. Uses `google-play-scraper` for Android and Apple's RSS JSON feed for iOS. Automatically scrubs Personally Identifiable Information (PII) to ensure data privacy before it ever hits an LLM.
+- **Theme Classification (Phase 2):** Leverages **Groq (Llama 3.3 70B)** for blazing-fast inference. It analyzes verbatim review text and categorizes them into dynamic product themes (e.g., "UI/UX Friction", "Payment Gateway Failures").
+- **Pulse Note Generation (Phase 3):** Uses **Google Gemini 2.5 Flash** to synthesize the categorized themes into a highly readable, Markdown-formatted "Weekly Pulse Note" tailored for executive and product team reading.
+- **Automated Distribution (Phase 4):** Compiles the Markdown into responsive HTML and securely emails it to stakeholders using Gmail's SMTP relay.
 
----
-
-## 📦 Prerequisites
-
-- **Python 3.9+**
-- API keys:
-  - `GROQ_API_KEY` — [Get from Groq Console](https://console.groq.com/)
-  - `GEMINI_API_KEY` — [Get from Google AI Studio](https://aistudio.google.com/apikey)
-- For email delivery (optional):
-  - `SENDER_EMAIL` — Your Gmail address
-  - `SENDER_APP_PASSWORD` — [Generate Gmail App Password](https://myaccount.google.com/apppasswords)
+### 2. Premium "Liquid Glass" Web UI (Phase 5)
+The entire pipeline is wrapped in a highly polished **Streamlit Dashboard** (`phase5_ui/app.py`). 
+We bypassed standard Streamlit components using custom CSS injection to create an Apple-inspired **"Glassmorphism"** aesthetic:
+- **Translucency & Blur:** UI Cards use `rgba(128, 128, 128, 0.08)` backgrounds with `backdrop-filter: blur(16px)` to create a frosted glass effect that perfectly adapts to Streamlit's Light and Dark modes.
+- **Micro-Interactions:** Theme cards organically float upwards (`translateY`) with enhanced drop-shadows on mouse hover.
+- **Sentiment Badges:** The UI instantly parses star ratings on the fly (1-5) and injects dynamic, color-coded sentiment pills (`Positive`, `Mixed`, `Critical`) next to sample user quotes.
 
 ---
 
-## 🔧 Setup
+## 🚀 Quick Start (Streamlit UI)
 
+The recommended way to use this application is through the provided web dashboard.
+
+### Prerequisites
+1. Python 3.9+ installed.
+2. API Keys for **Groq** (`GROQ_API_KEY`) and **Google Gemini** (`GEMINI_API_KEY`).
+3. An App Password for a Gmail account (`SENDER_EMAIL`, `SENDER_APP_PASSWORD`) if you wish to use the email feature.
+
+### Setup
 ```bash
 # 1. Clone the repository
 git clone https://github.com/YOUR_USERNAME/indmoney-review-pulse.git
@@ -42,126 +46,52 @@ cd indmoney-review-pulse
 # 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Create .env with your API keys
+# 3. Configure Environment Variables
 cp .env.example .env
-# Edit .env and add your keys
+# Open .env and insert your API keys and Email credentials
 ```
 
----
-
-## 🚀 Quick Start — Streamlit Web UI (Recommended)
-
+### Running the App
 ```bash
 streamlit run phase5_ui/app.py
 ```
-
-Open **http://localhost:8501** in your browser. From the dashboard you can:
-- Click **🔍 Analyze Reviews** to run the full pipeline (Phase 1 → 2 → 3)
-- View **theme cards** with rating distributions and sample quotes
-- Read the **weekly pulse note** and download as `.md`
-- **Send the email** directly from the UI
-
-> ⏱ First run takes ~6 minutes (Phase 2 waits for Groq rate limits).
+Open **http://localhost:8501** in your browser. Click the "**🔍 Analyze Reviews**" button to trigger the pipeline sequence. Please note that Phase 2 incorporates intentional rate-limit delays to comply with Groq's free-tier restrictions (taking ~5 minutes to process 200 reviews).
 
 ---
 
-## 🖥️ CLI — Run Phases Individually
+## 🖥️ CLI Execution (Headless Mode)
+
+You can bypass the UI and run the pipeline sequence headless via the CLI. This is ideal for cron jobs or CI/CD scheduling.
 
 ```bash
-# Phase 1 — Scrape reviews (~30 seconds)
-python3 run_phase1.py
-
-# Phase 2 — Theme classification via Groq (~5 minutes)
-python3 run_phase2.py
-
-# Phase 3 — Generate pulse note via Gemini (~5 seconds)
-python3 run_phase3.py
-
-# Phase 4 — Email the pulse note
-python3 run_phase4.py --to recipient@example.com
-```
-
-**Or as a single command:**
-```bash
-python3 run_phase1.py && python3 run_phase2.py && python3 run_phase3.py && python3 run_phase4.py --to recipient@example.com
+# Run the entire sequence in one command
+python3 run_phase1.py && \
+python3 run_phase2.py && \
+python3 run_phase3.py && \
+python3 run_phase4.py --to your_manager@example.com
 ```
 
 ---
 
-## 🗂️ Project Structure
+## 📊 Outputs & Artifacts
 
-```
-indmoney-review-pulse/
-├── .env.example              # API key template
-├── .gitignore
-├── requirements.txt
-├── README.md
-├── architecture.md           # System architecture docs
-│
-├── phase1_scraper/           # Phase 1: Data extraction
-│   └── scraper.py
-├── run_phase1.py
-│
-├── phase2_themes/            # Phase 2: Groq theme classification
-│   └── theme_generator.py
-├── run_phase2.py
-│
-├── phase3_pulse/             # Phase 3: Gemini pulse note
-│   └── pulse_generator.py
-├── run_phase3.py
-│
-├── phase4_email/             # Phase 4: Email delivery
-│   └── email_sender.py
-├── run_phase4.py
-│
-├── phase5_ui/                # Phase 5: Streamlit Web UI
-│   └── app.py
-│
-├── dashboard.py              # Lightweight localhost preview (no deps)
-│
-└── output/                   # Generated files (gitignored)
-    ├── playstore_reviews.json
-    ├── appstore_reviews.json
-    ├── themes-YYYY-MM-DD.json
-    ├── grouped_reviews-YYYY-MM-DD.json
-    ├── weekly_pulse-YYYY-MM-DD.md
-    ├── email_body-YYYY-MM-DD.html
-    └── pulse_email-YYYY-MM-DD.eml
-```
+All generated data is saved locally in the `/output` directory, serving as a historical archive. The pipeline creates the following chain of artifacts during a successful run:
 
----
-
-## 🔑 Tech Stack
-
-| Component | Technology |
-|-----------|------------|
-| Play Store Scraper | `google-play-scraper` |
-| App Store Scraper | Apple RSS JSON Feed |
-| Theme Classification | Groq — Llama 3.3 70B |
-| Pulse Note Generation | Gemini 2.5 Flash |
-| Email | Gmail SMTP (`smtplib`) |
-| Web UI | Streamlit |
-
----
-
-## 📊 Sample Output
-
-The pipeline generates a weekly pulse note like this:
-
-> ## 📊 INDmoney — Weekly Review Pulse
-> **Reviews Analyzed:** 300
->
-> ### 🔍 Key Themes
-> - **App Functionality & Features** (139 reviews) — Users value core features but want more
-> - **User Interface Issues** (55 reviews) — UI changes causing confusion
-> - **Transaction & Withdrawal Problems** (49 reviews) — Fund transfer delays
->
-> ### 🎯 Recommended Actions
-> - Prioritize clean, stable UI with user testing
-> - Resolve all transaction failures and withdrawal delays
-> - Overhaul customer support for faster response times
-
----
-
-## 📝 License
-
+1. **`appstore_reviews.json` & `playstore_reviews.json`**
+   - Raw, PII-scrubbed JSON dumps directly from the scrapers.
+2. **`themes-YYYY-MM-DD.json`**
+   - The Groq AI output mapping raw reviews to identified product themes.
+3. **`grouped_reviews-YYYY-MM-DD.json`**
+   - A structured aggregation showing Theme -> List[Reviews], counts, and percentage shares. This powers the UI Dashboard visualizations.
+4. **`weekly_pulse-YYYY-MM-DD.md`**
+   - The final Gemini AI synthesized report. Example excerpt:
+   ```markdown
+   ## 📊 INDmoney — Weekly Review Pulse
+   **Reviews Analyzed:** 200 (Play Store: 150, App Store: 50)
+   
+   ### 🚨 Critical Friction Points
+   * **KYC & Onboarding Delays (32%):** Users report being stuck on the video KYC confirmation screen. 
+     * *"Stuck on verification for 4 days now, support isn't replying."* (★☆☆☆☆)
+   ```
+5. **`email_body-YYYY-MM-DD.html` & `pulse_email-YYYY-MM-DD.eml`**
+   - The Markdown converted to inline-styled HTML, and the exact `.eml` payload that was dispatched via SMTP.
